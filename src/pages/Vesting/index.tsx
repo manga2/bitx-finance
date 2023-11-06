@@ -115,14 +115,14 @@ const BitLock = () => {
             let total_locked_value = 0;
             for (let i = 0; i < total_locked_token_ids.length; i++) {
                 const token_id = total_locked_token_ids[i];
-                const amount = convertWeiToEsdt(total_locked_token_amounts[i], TOKENS[token_id].decimals);
+                const amount = convertWeiToEsdt(total_locked_token_amounts[i], TOKENS[token_id]?.decimals);
 
                 total_locked_tokens.push({
                     ...TOKENS[token_id],
                     amount,
                 });
 
-                total_locked_value += amount * TOKENS[token_id].unit_price_in_usd;
+                total_locked_value += amount * TOKENS[token_id]?.unit_price_in_usd;
             }
             total_locked_value = precisionFloor(total_locked_value);
 
@@ -169,18 +169,18 @@ const BitLock = () => {
                 const lock_name = value.lock_name.toString();
                 const lock_purpose = value.lock_purpose.toString();
                 const lock_token_id = value.lock_token_id.toString();
-                const lock_token_amount = convertWeiToEsdt(value.lock_token_amount, TOKENS[lock_token_id].decimals);
+                const lock_token_amount = convertWeiToEsdt(value.lock_token_amount, TOKENS[lock_token_id]?.decimals);
 
                 const lock_release_count = value.lock_release_count.toNumber();
                 const lock_release_timestamps = value.lock_release_timestamps.map((v: any) => v.toNumber() * SECOND_IN_MILLI);
                 const lock_release_percentages = value.lock_release_percentages.map((v: any) => v.toNumber() / 100);
-                const lock_release_amounts = value.lock_release_amounts.map((v: any) => convertWeiToEsdt(v, TOKENS[lock_token_id].decimals));
+                const lock_release_amounts = value.lock_release_amounts.map((v: any) => convertWeiToEsdt(v, TOKENS[lock_token_id]?.decimals));
 
                 const lock_left_release_count = value.lock_left_release_count.toNumber();
                 const lock_left_claimable_release_count = value.lock_left_claimable_release_count.toNumber();
 
                 //
-                const unit_price_in_usd = TOKENS[lock_token_id].unit_price_in_usd;
+                const unit_price_in_usd = TOKENS[lock_token_id]?.unit_price_in_usd;
                 const total_value = precisionFloor(lock_release_amounts.reduce((a, b) => a + b, 0) * unit_price_in_usd);
 
                 const next_release_timestamp = lock_left_release_count > 0 ? lock_release_timestamps[lock_release_count - lock_left_release_count - 1] : 0;
@@ -372,7 +372,7 @@ const BitLock = () => {
                                         {/* <Td>{lock.lock_name}</Td> */}
                                         <Td className="d-flex text-left align-items-center">
                                             <div style={{ width: "30%", textAlign: "right" }}>
-                                                <img src={lock && TOKENS[lock.lock_token_id].logo} style={{
+                                                <img src={lock && TOKENS[lock.lock_token_id]?.logo} style={{
                                                     width: '2rem',
                                                     marginRight:"10px"
                                                 }} alt="BTX" />
@@ -384,7 +384,7 @@ const BitLock = () => {
                                             </div>
                                         </Td>
                                         <Td>{lock.lock_token_amount} {lock.lock_token_id.split('-')[0]}</Td>
-                                        <Td>$ {lock.unit_price_in_usd}</Td>
+                                        <Td>$ {lock?.unit_price_in_usd}</Td>
                                         <Td>$ {lock.total_value}</Td>
                                         <Td>{lock.next_release_timestamp > 0 ? convertTimestampToDateTime(lock.next_release_timestamp) : '-'}</Td>
                                         <Td><div className="view-but" onClick={() => handleClickView(lock.lock_id)}>view</div></Td>
